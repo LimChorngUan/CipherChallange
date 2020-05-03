@@ -4404,7 +4404,16 @@ var $elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
-var $author$project$Main$initialModel = {cipher: '', pairs: $elm$core$Maybe$Nothing, plain: '', text: 'abcd'};
+var $author$project$Main$initialModel = {
+	cipher: '',
+	pairs: _List_fromArray(
+		[
+			_Utils_Tuple2('A', 'b'),
+			_Utils_Tuple2('C', 'd')
+		]),
+	plain: '',
+	text: 'abcd'
+};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$core$String$cons = _String_cons;
 var $elm$core$String$fromChar = function (_char) {
@@ -4499,12 +4508,41 @@ var $author$project$Main$genAllUpperCaseChars = $author$project$Main$generateCha
 	A2($elm$core$List$range, 65, 90));
 var $author$project$Main$cipherButtonsView = A2($elm$core$List$map, $author$project$Main$charButtonView, $author$project$Main$genAllUpperCaseChars);
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $author$project$Main$cipherPlainPairView = function (_v0) {
+	var cipher = _v0.a;
+	var plain = _v0.b;
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$span,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text(cipher + (' -> ' + plain))
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('X')
+					]))
+			]));
+};
+var $author$project$Main$cipherPlainPairsView = function (pairs) {
+	return A2($elm$core$List$map, $author$project$Main$cipherPlainPairView, pairs);
+};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $author$project$Main$genAllLowerCaseChars = $author$project$Main$generateChars(
 	A2($elm$core$List$range, 97, 122));
 var $author$project$Main$plainButtonsView = A2($elm$core$List$map, $author$project$Main$charButtonView, $author$project$Main$genAllLowerCaseChars);
-var $author$project$Main$view = function (_v0) {
+var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
@@ -4525,7 +4563,45 @@ var $author$project$Main$view = function (_v0) {
 						$elm$html$Html$text('Explanation goes here')
 					])),
 				A2($elm$html$Html$div, _List_Nil, $author$project$Main$cipherButtonsView),
-				A2($elm$html$Html$div, _List_Nil, $author$project$Main$plainButtonsView)
+				A2($elm$html$Html$div, _List_Nil, $author$project$Main$plainButtonsView),
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Confirm')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$h2,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Cipher-Plain pairs')
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_Nil,
+						$author$project$Main$cipherPlainPairsView(model.pairs))
+					])),
+				A2(
+				$elm$html$Html$button,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Reset')
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Cipher text goes here')
+					]))
 			]));
 };
 var $author$project$Main$main = $author$project$Main$view($author$project$Main$initialModel);

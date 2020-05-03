@@ -1,6 +1,6 @@
 module Main exposing (main)
 
-import Html exposing (Html, div, h1, text, button, p)
+import Html exposing (Html, button, div, h1, h2, p, span, text)
 
 
 
@@ -19,23 +19,21 @@ main =
 --     , view = view
 --     , update = update
 --     }
-
-
 -- MODEL
 
 
-type alias CipherAlphabet =
+type alias CipherLetter =
     String
 
 
-type alias PlainAlphabet =
+type alias PlainLetter =
     String
 
 
 type alias Model =
-    { cipher : CipherAlphabet
-    , plain : PlainAlphabet
-    , pairs : Maybe (List ( CipherAlphabet, PlainAlphabet ))
+    { cipher : CipherLetter
+    , plain : PlainLetter
+    , pairs : List ( CipherLetter, PlainLetter )
     , text : String
     }
 
@@ -44,23 +42,39 @@ initialModel : Model
 initialModel =
     { cipher = ""
     , plain = ""
-    , pairs = Maybe.Nothing
+    , pairs = [ ( "A", "b" ), ( "C", "d" ) ]
     , text = "abcd"
     }
 
 
 
--- VIEW
+-- ----- VIEW -----
 
 
 view : Model -> Html message
-view _ =
+view model =
     div []
-        [ h1 [] [ text "Cipher Challange Stage 1: Simple Monoalphabetic Substitution Cipher"]
-        , p [] [ text "Explanation goes here"]
+        [ h1 [] [ text "Cipher Challange Stage 1: Simple Monoalphabetic Substitution Cipher" ]
+        , p [] [ text "Explanation goes here" ]
         , div [] cipherButtonsView
         , div [] plainButtonsView
+        , button [] [ text "Confirm" ]
+        , div []
+            [ h2 [] [ text "Cipher-Plain pairs" ]
+            , div [] (cipherPlainPairsView model.pairs)
+            ]
+        , button [] [ text "Reset" ]
+        , div [] [ text "Cipher text goes here" ]
         ]
+
+
+
+-- alphabet button view
+
+
+charButtonView : Char -> Html message
+charButtonView char =
+    button [] [ text (String.fromChar char) ]
 
 
 cipherButtonsView : List (Html message)
@@ -74,12 +88,24 @@ plainButtonsView =
 
 
 
-charButtonView : Char -> Html message
-charButtonView char =
-    button [] [ text (String.fromChar char) ]
+-- cipher-plain pairs view
 
 
--- HELPER
+cipherPlainPairView : ( CipherLetter, PlainLetter ) -> Html message
+cipherPlainPairView ( cipher, plain ) =
+    div []
+        [ span [] [ text (cipher ++ " -> " ++ plain) ]
+        , button [] [ text "X" ]
+        ]
+
+
+cipherPlainPairsView : List ( CipherLetter, PlainLetter ) -> List (Html message)
+cipherPlainPairsView pairs =
+    List.map cipherPlainPairView pairs
+
+
+
+-- ----- HELPER -----
 
 
 generateChars : List Int -> List Char
