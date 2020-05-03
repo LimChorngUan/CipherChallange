@@ -57,7 +57,7 @@ view : Model -> Html message
 view _ =
     div []
         [ h1 [] [ text "Cipher Challange Stage 1: Simple Monoalphabetic Substitution Cipher"]
-        , p [] [ text "Explanation here"]
+        , p [] [ text "Explanation goes here"]
         , div [] cipherButtonsView
         , div [] plainButtonsView
         ]
