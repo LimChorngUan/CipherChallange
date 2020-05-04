@@ -1,24 +1,22 @@
 module Main exposing (main)
 
+import Browser
 import Html exposing (Html, button, div, h1, h2, p, span, text)
-
+import Html.Events exposing (onClick)
 
 
 -- MAIN
 
 
-main : Html message
-main =
-    view initialModel
+main: Program () Model Msg
+main = Browser.sandbox
+    { init = initialModel
+    , view = view
+    , update = update
+    }
 
 
 
--- main: Program () Model Msg
--- main = Browser.sandbox
---     { init = initialModel
---     , view = view
---     , update = update
---     }
 -- MODEL
 
 
@@ -42,56 +40,81 @@ initialModel : Model
 initialModel =
     { cipher = ""
     , plain = ""
-    , pairs = [ ( "A", "b" ), ( "C", "d" ) ]
-    , text = "abcd"
+    , pairs = []
+    , text = "abcd jakjsdf;l ajkwiou mzm,xiuw  ajksldj;f qewiuk ajkdjfiwm vjkladjsf jqiweru"
     }
+
+
+-- UPDATE
+
+
+type Msg
+    = SelectChipherLetter String
+    | SelectPlainLetter String
+
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        SelectChipherLetter cipherLetter ->
+            { model | cipher = cipherLetter }
+
+        SelectPlainLetter plainLetter ->
+            { model | plain = plainLetter }
 
 
 
 -- ----- VIEW -----
 
 
-view : Model -> Html message
+view : Model -> Html Msg
 view model =
     div []
         [ h1 [] [ text "Cipher Challange Stage 1: Simple Monoalphabetic Substitution Cipher" ]
         , p [] [ text "Explanation goes here" ]
         , div [] cipherButtonsView
         , div [] plainButtonsView
+        , p [] [ text model.cipher ]
+        , p [] [ text model.plain ]
         , button [] [ text "Confirm" ]
         , div []
             [ h2 [] [ text "Cipher-Plain pairs" ]
             , div [] (cipherPlainPairsView model.pairs)
             ]
         , button [] [ text "Reset" ]
-        , div [] [ text "Cipher text goes here" ]
+        , div [] [ text model.text ]
         ]
 
 
 
--- alphabet button view
+-- button view
 
 
-charButtonView : Char -> Html message
-charButtonView char =
-    button [] [ text (String.fromChar char) ]
-
-
-cipherButtonsView : List (Html message)
+cipherButtonsView : List (Html Msg)
 cipherButtonsView =
-    List.map charButtonView genAllUpperCaseChars
+    let
+        buttonView : String -> Html Msg
+        buttonView str =
+            button [ onClick (SelectChipherLetter str) ] [ text str ]
+    in
+        List.map buttonView genAllUpperCaseStr
 
 
-plainButtonsView : List (Html message)
+plainButtonsView : List (Html Msg)
 plainButtonsView =
-    List.map charButtonView genAllLowerCaseChars
+    let
+        buttonView : String -> Html Msg
+        buttonView str =
+            button [ onClick (SelectPlainLetter str) ] [ text str ]
+    in
+        List.map buttonView genAllLowerCaseStr
 
 
 
 -- cipher-plain pairs view
 
 
-cipherPlainPairView : ( CipherLetter, PlainLetter ) -> Html message
+cipherPlainPairView : ( CipherLetter, PlainLetter ) -> Html Msg
 cipherPlainPairView ( cipher, plain ) =
     div []
         [ span [] [ text (cipher ++ " -> " ++ plain) ]
@@ -99,10 +122,9 @@ cipherPlainPairView ( cipher, plain ) =
         ]
 
 
-cipherPlainPairsView : List ( CipherLetter, PlainLetter ) -> List (Html message)
+cipherPlainPairsView : List ( CipherLetter, PlainLetter ) -> List (Html Msg)
 cipherPlainPairsView pairs =
     List.map cipherPlainPairView pairs
-
 
 
 -- ----- HELPER -----
@@ -113,11 +135,13 @@ generateChars unicodes =
     List.map Char.fromCode unicodes
 
 
-genAllUpperCaseChars : List Char
-genAllUpperCaseChars =
+genAllUpperCaseStr : List String
+genAllUpperCaseStr =
     generateChars (List.range 65 90)
+    |> List.map String.fromChar
 
 
-genAllLowerCaseChars : List Char
-genAllLowerCaseChars =
+genAllLowerCaseStr : List String
+genAllLowerCaseStr =
     generateChars (List.range 97 122)
+    |> List.map String.fromChar
