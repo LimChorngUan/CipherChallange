@@ -5180,10 +5180,19 @@ var $author$project$Main$update = F2(
 				{plain: plainLetter});
 		}
 	});
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $author$project$Main$SelectChipherLetter = function (a) {
 	return {$: 'SelectChipherLetter', a: a};
 };
+var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$core$String$cons = _String_cons;
 var $elm$core$String$fromChar = function (_char) {
 	return A2($elm$core$String$cons, _char, '');
@@ -5223,7 +5232,8 @@ var $author$project$Main$cipherButtonsView = function () {
 			_List_fromArray(
 				[
 					$elm$html$Html$Events$onClick(
-					$author$project$Main$SelectChipherLetter(str))
+					$author$project$Main$SelectChipherLetter(str)),
+					$elm$html$Html$Attributes$class('btn btn-alpha')
 				]),
 			_List_fromArray(
 				[
@@ -5233,36 +5243,43 @@ var $author$project$Main$cipherButtonsView = function () {
 	return A2($elm$core$List$map, buttonView, $author$project$Main$genAllUpperCaseStr);
 }();
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$html$Html$span = _VirtualDom_node('span');
-var $author$project$Main$cipherPlainPairView = function (_v0) {
-	var cipher = _v0.a;
-	var plain = _v0.b;
+var $author$project$Main$cipherPlainPairView = function (model) {
+	var plain = $elm$core$String$isEmpty(model.plain) ? '_' : model.plain;
+	var cipher = $elm$core$String$isEmpty(model.cipher) ? '_' : model.cipher;
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
-				A2(
-				$elm$html$Html$span,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(cipher + (' -> ' + plain))
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('X')
-					]))
+				$elm$html$Html$text(cipher + (' >> ' + plain))
 			]));
 };
-var $author$project$Main$cipherPlainPairsView = function (pairs) {
-	return A2($elm$core$List$map, $author$project$Main$cipherPlainPairView, pairs);
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
+var $author$project$Main$confirmGenPairButtonView = function (model) {
+	var shouldDisable = $elm$core$String$isEmpty(model.cipher) || $elm$core$String$isEmpty(model.plain);
+	return A2(
+		$elm$html$Html$button,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$disabled(shouldDisable),
+				$elm$html$Html$Attributes$class('btn')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Confirm')
+			]));
 };
+var $author$project$Text$explanation = 'Explanation goes here';
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$html$Html$h2 = _VirtualDom_node('h2');
+var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$html$Html$p = _VirtualDom_node('p');
 var $author$project$Main$SelectPlainLetter = function (a) {
 	return {$: 'SelectPlainLetter', a: a};
@@ -5279,7 +5296,8 @@ var $author$project$Main$plainButtonsView = function () {
 			_List_fromArray(
 				[
 					$elm$html$Html$Events$onClick(
-					$author$project$Main$SelectPlainLetter(str))
+					$author$project$Main$SelectPlainLetter(str)),
+					$elm$html$Html$Attributes$class('btn btn-alpha')
 				]),
 			_List_fromArray(
 				[
@@ -5291,76 +5309,98 @@ var $author$project$Main$plainButtonsView = function () {
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('container')
+			]),
 		_List_fromArray(
 			[
 				A2(
-				$elm$html$Html$h1,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Cipher Challange Stage 1: Simple Monoalphabetic Substitution Cipher')
-					])),
-				A2(
-				$elm$html$Html$p,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Explanation goes here')
-					])),
-				A2($elm$html$Html$div, _List_Nil, $author$project$Main$cipherButtonsView),
-				A2($elm$html$Html$div, _List_Nil, $author$project$Main$plainButtonsView),
-				A2(
-				$elm$html$Html$p,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(model.cipher)
-					])),
-				A2(
-				$elm$html$Html$p,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(model.plain)
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Confirm')
-					])),
-				A2(
 				$elm$html$Html$div,
-				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('maxWidth')
+					]),
 				_List_fromArray(
 					[
 						A2(
-						$elm$html$Html$h2,
-						_List_Nil,
+						$elm$html$Html$h1,
 						_List_fromArray(
 							[
-								$elm$html$Html$text('Cipher-Plain pairs')
+								$elm$html$Html$Attributes$class('title margin-btm-m')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Simple Monoalphabetic Substitution Cipher')
+							])),
+						A2(
+						$elm$html$Html$p,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('text')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text($author$project$Text$explanation)
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('separator')
+							]),
+						_List_Nil),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('btns-container margin-btm-s')
+							]),
+						$author$project$Main$cipherButtonsView),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('btns-container margin-btm-m')
+							]),
+						$author$project$Main$plainButtonsView),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('row margin-btm-l')
+							]),
+						_List_fromArray(
+							[
+								$author$project$Main$cipherPlainPairView(model),
+								$author$project$Main$confirmGenPairButtonView(model)
 							])),
 						A2(
 						$elm$html$Html$div,
 						_List_Nil,
-						$author$project$Main$cipherPlainPairsView(model.pairs))
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text('Reset')
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(model.text)
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$h3,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('sub-title margin-btm-m')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('Cipher-Plain Pairs:')
+									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('text')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(model.text)
+							]))
 					]))
 			]));
 };
