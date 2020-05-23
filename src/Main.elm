@@ -2,20 +2,22 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, h1, h3, p, text)
-import Html.Attributes exposing (disabled, class)
+import Html.Attributes exposing (class, disabled)
 import Html.Events exposing (onClick)
-
 import Text
+
 
 
 -- MAIN
 
-main: Program () Model Msg
-main = Browser.sandbox
-    { init = initialModel
-    , view = view
-    , update = update
-    }
+
+main : Program () Model Msg
+main =
+    Browser.sandbox
+        { init = initialModel
+        , view = view
+        , update = update
+        }
 
 
 
@@ -47,6 +49,7 @@ initialModel =
     }
 
 
+
 -- UPDATE
 
 
@@ -54,8 +57,7 @@ type Msg
     = SelectCipherLetter String
     | SelectPlainLetter String
     | GenerateCipherLetterPair
-    | RemoveCipherLetterPair (CipherLetter, PlainLetter)
-
+    | RemoveCipherLetterPair ( CipherLetter, PlainLetter )
 
 
 update : Msg -> Model -> Model
@@ -68,23 +70,21 @@ update msg model =
             { model | plain = plainLetter }
 
         GenerateCipherLetterPair ->
-            { model 
-                | pairs = (model.cipher, model.plain) :: model.pairs
+            { model
+                | pairs = ( model.cipher, model.plain ) :: model.pairs
                 , cipher = ""
                 , plain = ""
             }
 
-        RemoveCipherLetterPair (cipher, plain) ->
+        RemoveCipherLetterPair ( cipher, plain ) ->
             let
-                shouldBeKept : (CipherLetter, PlainLetter) -> Bool
-                shouldBeKept (targetCipher, targetPlain) =
+                shouldBeKept : ( CipherLetter, PlainLetter ) -> Bool
+                shouldBeKept ( targetCipher, targetPlain ) =
                     cipher /= targetCipher && plain /= targetPlain
             in
-                { model
-                    | pairs = List.filter shouldBeKept model.pairs
-                }
-            
-
+            { model
+                | pairs = List.filter shouldBeKept model.pairs
+            }
 
 
 
@@ -97,21 +97,22 @@ view model =
         [ div [ class "maxWidth" ]
             [ h1 [ class "title margin-btm-m" ] [ text "Simple Monoalphabetic Substitution Cipher" ]
             , p [ class "text" ] [ text Text.explanation ]
-            , div [class "separator" ] []
+            , div [ class "separator" ] []
             , div [ class "btns-container margin-btm-s" ] cipherButtonsView
             , div [ class "btns-container margin-btm-m" ] plainButtonsView
-            , div [ class "row margin-btm-l"]
+            , div [ class "row margin-btm-l" ]
                 [ cipherToPlainView model
                 , confirmGenPairButtonView model
                 ]
             , div []
-                [ h3 [ class "sub-title margin-btm-m"] [ text "Cipher-Plain Pairs:" ]
-                , div [ class "row"] (List.map cipherPlainPairView model.pairs) 
+                [ h3 [ class "sub-title margin-btm-m" ] [ text "Cipher-Plain Pairs:" ]
+                , div [ class "row" ] (List.map cipherPlainPairView model.pairs)
                 ]
+
             -- , button [ class "btn" ] [ text "Reset" ]
             , div [ class "text" ] [ text model.text ]
+            ]
         ]
-    ]
 
 
 
@@ -124,12 +125,12 @@ cipherButtonsView =
         buttonView : String -> Html Msg
         buttonView str =
             button
-              [ onClick (SelectCipherLetter str)
-              , class "btn btn-alpha"
-              ]
-              [ text str ]
+                [ onClick (SelectCipherLetter str)
+                , class "btn btn-alpha"
+                ]
+                [ text str ]
     in
-        List.map buttonView genAllUpperCaseStr
+    List.map buttonView genAllUpperCaseStr
 
 
 plainButtonsView : List (Html Msg)
@@ -138,26 +139,26 @@ plainButtonsView =
         buttonView : String -> Html Msg
         buttonView str =
             button
-              [ onClick (SelectPlainLetter str)
-              , class "btn btn-alpha"
-              ]
-              [ text str ]
+                [ onClick (SelectPlainLetter str)
+                , class "btn btn-alpha"
+                ]
+                [ text str ]
     in
-        List.map buttonView genAllLowerCaseStr
+    List.map buttonView genAllLowerCaseStr
 
 
 confirmGenPairButtonView : Model -> Html Msg
 confirmGenPairButtonView model =
     let
-        shouldDisable = String.isEmpty model.cipher || String.isEmpty model.plain
+        shouldDisable =
+            String.isEmpty model.cipher || String.isEmpty model.plain
     in
-        button
-            [ disabled shouldDisable
-            , class "btn"
-            , onClick GenerateCipherLetterPair
-            ]
-            [ text "Confirm" ]
-
+    button
+        [ disabled shouldDisable
+        , class "btn"
+        , onClick GenerateCipherLetterPair
+        ]
+        [ text "Confirm" ]
 
 
 
@@ -168,30 +169,33 @@ cipherToPlainView : Model -> Html Msg
 cipherToPlainView model =
     let
         cipher =
-             if String.isEmpty model.cipher then
+            if String.isEmpty model.cipher then
                 "_"
-             else
+
+            else
                 model.cipher
 
         plain =
             if String.isEmpty model.plain then
                 "_"
-             else
+
+            else
                 model.plain
     in
-        div [] [ text (cipher ++ " >> " ++ plain) ]
+    div [] [ text (cipher ++ " >> " ++ plain) ]
 
 
 cipherPlainPairView : ( CipherLetter, PlainLetter ) -> Html Msg
-cipherPlainPairView (cipher, plain) =
-    div [ class "cipherPlainPairContainer margin-btm-l" ] 
-        [ p [] [ text (cipher ++ " >> " ++ plain)]
-        , button 
-            [ class "btn btn-sm-red" 
-            , onClick (RemoveCipherLetterPair (cipher, plain))
+cipherPlainPairView ( cipher, plain ) =
+    div [ class "cipherPlainPairContainer margin-btm-l" ]
+        [ p [] [ text (cipher ++ " >> " ++ plain) ]
+        , button
+            [ class "btn btn-sm-red"
+            , onClick (RemoveCipherLetterPair ( cipher, plain ))
             ]
             [ text "X" ]
         ]
+
 
 
 -- ----- HELPER -----
@@ -205,10 +209,10 @@ generateChars unicodes =
 genAllUpperCaseStr : List String
 genAllUpperCaseStr =
     generateChars (List.range 65 90)
-    |> List.map String.fromChar
+        |> List.map String.fromChar
 
 
 genAllLowerCaseStr : List String
 genAllLowerCaseStr =
     generateChars (List.range 97 122)
-    |> List.map String.fromChar
+        |> List.map String.fromChar
