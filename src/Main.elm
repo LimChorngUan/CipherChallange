@@ -10,7 +10,6 @@ import Text
 
 -- MAIN
 
-
 main: Program () Model Msg
 main = Browser.sandbox
     { init = initialModel
@@ -52,19 +51,40 @@ initialModel =
 
 
 type Msg
-    = SelectChipherLetter String
+    = SelectCipherLetter String
     | SelectPlainLetter String
+    | GenerateCipherLetterPair
+    | RemoveCipherLetterPair (CipherLetter, PlainLetter)
 
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        SelectChipherLetter cipherLetter ->
+        SelectCipherLetter cipherLetter ->
             { model | cipher = cipherLetter }
 
         SelectPlainLetter plainLetter ->
             { model | plain = plainLetter }
+
+        GenerateCipherLetterPair ->
+            { model 
+                | pairs = (model.cipher, model.plain) :: model.pairs
+                , cipher = ""
+                , plain = ""
+            }
+
+        RemoveCipherLetterPair (cipher, plain) ->
+            let
+                shouldBeKept : (CipherLetter, PlainLetter) -> Bool
+                shouldBeKept (targetCipher, targetPlain) =
+                    cipher /= targetCipher && plain /= targetPlain
+            in
+                { model
+                    | pairs = List.filter shouldBeKept model.pairs
+                }
+            
+
 
 
 
@@ -81,12 +101,12 @@ view model =
             , div [ class "btns-container margin-btm-s" ] cipherButtonsView
             , div [ class "btns-container margin-btm-m" ] plainButtonsView
             , div [ class "row margin-btm-l"]
-                [ cipherPlainPairView model
+                [ cipherToPlainView model
                 , confirmGenPairButtonView model
                 ]
             , div []
                 [ h3 [ class "sub-title margin-btm-m"] [ text "Cipher-Plain Pairs:" ]
-
+                , div [ class "row"] (List.map cipherPlainPairView model.pairs) 
                 ]
             -- , button [ class "btn" ] [ text "Reset" ]
             , div [ class "text" ] [ text model.text ]
@@ -104,7 +124,7 @@ cipherButtonsView =
         buttonView : String -> Html Msg
         buttonView str =
             button
-              [ onClick (SelectChipherLetter str)
+              [ onClick (SelectCipherLetter str)
               , class "btn btn-alpha"
               ]
               [ text str ]
@@ -133,7 +153,9 @@ confirmGenPairButtonView model =
     in
         button
             [ disabled shouldDisable
-            , class "btn"]
+            , class "btn"
+            , onClick GenerateCipherLetterPair
+            ]
             [ text "Confirm" ]
 
 
@@ -142,8 +164,8 @@ confirmGenPairButtonView model =
 -- cipher-plain pairs view
 
 
-cipherPlainPairView : Model -> Html Msg
-cipherPlainPairView model =
+cipherToPlainView : Model -> Html Msg
+cipherToPlainView model =
     let
         cipher =
              if String.isEmpty model.cipher then
@@ -158,6 +180,18 @@ cipherPlainPairView model =
                 model.plain
     in
         div [] [ text (cipher ++ " >> " ++ plain) ]
+
+
+cipherPlainPairView : ( CipherLetter, PlainLetter ) -> Html Msg
+cipherPlainPairView (cipher, plain) =
+    div [ class "cipherPlainPairContainer margin-btm-l" ] 
+        [ p [] [ text (cipher ++ " >> " ++ plain)]
+        , button 
+            [ class "btn btn-sm-red" 
+            , onClick (RemoveCipherLetterPair (cipher, plain))
+            ]
+            [ text "X" ]
+        ]
 
 
 -- ----- HELPER -----

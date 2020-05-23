@@ -68,13 +68,35 @@
   height: 28px;
 }
 
+.btn-sm-red {
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  border: none;
+  color: #f35454;
+}
+
+.btn-sm-red:hover {
+  background-color: #e97e7e;
+  color: white;
+}
+
 .row {
   display: flex;
   align-items: center;
 }
 
-.row > *:first-child {
+.row > * {
   margin-right: 20px;
+}
+
+.cipherPlainPairContainer {
+  display: flex;
+  align-items: center;
+}
+
+.cipherPlainPairContainer > p {
+  margin-right: 4px;
 }
 
 .margin-btm-s {
