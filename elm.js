@@ -5231,6 +5231,29 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $elm$html$Html$Attributes$classList = function (classes) {
+	return $elm$html$Html$Attributes$class(
+		A2(
+			$elm$core$String$join,
+			' ',
+			A2(
+				$elm$core$List$map,
+				$elm$core$Tuple$first,
+				A2($elm$core$List$filter, $elm$core$Tuple$second, classes))));
+};
+var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$bool(bool));
+	});
+var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
 var $elm$core$String$cons = _String_cons;
 var $elm$core$String$fromChar = function (_char) {
 	return A2($elm$core$String$cons, _char, '');
@@ -5244,6 +5267,36 @@ var $author$project$Main$genAllUpperCaseStr = A2(
 	$elm$core$String$fromChar,
 	$author$project$Main$generateChars(
 		A2($elm$core$List$range, 65, 90)));
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -5263,23 +5316,31 @@ var $elm$html$Html$Events$onClick = function (msg) {
 };
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Main$cipherButtonsView = function () {
-	var buttonView = function (str) {
+var $author$project$Main$cipherButtonsView = function (selectedCiphers) {
+	var buttonView = function (letter) {
+		var shouldDisabled = A2($elm$core$List$member, letter, selectedCiphers);
 		return A2(
 			$elm$html$Html$button,
 			_List_fromArray(
 				[
 					$elm$html$Html$Events$onClick(
-					$author$project$Main$SelectCipherLetter(str)),
-					$elm$html$Html$Attributes$class('btn btn-alpha')
+					$author$project$Main$SelectCipherLetter(letter)),
+					$elm$html$Html$Attributes$disabled(
+					A2($elm$core$List$member, letter, selectedCiphers)),
+					$elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2('btn btn-alpha', true),
+							_Utils_Tuple2('btn-disabled', shouldDisabled)
+						]))
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text(str)
+					$elm$html$Html$text(letter)
 				]));
 	};
 	return A2($elm$core$List$map, buttonView, $author$project$Main$genAllUpperCaseStr);
-}();
+};
 var $author$project$Main$RemoveCipherLetterPair = function (a) {
 	return {$: 'RemoveCipherLetterPair', a: a};
 };
@@ -5330,15 +5391,6 @@ var $author$project$Main$cipherToPlainView = function (model) {
 			]));
 };
 var $author$project$Main$GenerateCipherLetterPair = {$: 'GenerateCipherLetterPair'};
-var $elm$json$Json$Encode$bool = _Json_wrap;
-var $elm$html$Html$Attributes$boolProperty = F2(
-	function (key, bool) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			$elm$json$Json$Encode$bool(bool));
-	});
-var $elm$html$Html$Attributes$disabled = $elm$html$Html$Attributes$boolProperty('disabled');
 var $author$project$Main$confirmGenPairButtonView = function (model) {
 	var shouldDisable = $elm$core$String$isEmpty(model.cipher) || $elm$core$String$isEmpty(model.plain);
 	return A2(
@@ -5355,6 +5407,22 @@ var $author$project$Main$confirmGenPairButtonView = function (model) {
 			]));
 };
 var $author$project$Text$explanation = 'Explanation goes here';
+var $author$project$Main$FirstPos = {$: 'FirstPos'};
+var $author$project$Main$getPairElements = F2(
+	function (pos, pairs) {
+		if (pos.$ === 'FirstPos') {
+			return A2($elm$core$List$map, $elm$core$Tuple$first, pairs);
+		} else {
+			return A2($elm$core$List$map, $elm$core$Tuple$second, pairs);
+		}
+	});
+var $author$project$Main$getCiphers = function (pairs) {
+	return A2($author$project$Main$getPairElements, $author$project$Main$FirstPos, pairs);
+};
+var $author$project$Main$SecondPos = {$: 'SecondPos'};
+var $author$project$Main$getPlains = function (pairs) {
+	return A2($author$project$Main$getPairElements, $author$project$Main$SecondPos, pairs);
+};
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $author$project$Main$SelectPlainLetter = function (a) {
@@ -5365,23 +5433,31 @@ var $author$project$Main$genAllLowerCaseStr = A2(
 	$elm$core$String$fromChar,
 	$author$project$Main$generateChars(
 		A2($elm$core$List$range, 97, 122)));
-var $author$project$Main$plainButtonsView = function () {
-	var buttonView = function (str) {
+var $author$project$Main$plainButtonsView = function (selectedPlains) {
+	var buttonView = function (letter) {
+		var shouldDisabled = A2($elm$core$List$member, letter, selectedPlains);
 		return A2(
 			$elm$html$Html$button,
 			_List_fromArray(
 				[
 					$elm$html$Html$Events$onClick(
-					$author$project$Main$SelectPlainLetter(str)),
-					$elm$html$Html$Attributes$class('btn btn-alpha')
+					$author$project$Main$SelectPlainLetter(letter)),
+					$elm$html$Html$Attributes$disabled(
+					A2($elm$core$List$member, letter, selectedPlains)),
+					$elm$html$Html$Attributes$classList(
+					_List_fromArray(
+						[
+							_Utils_Tuple2('btn btn-alpha', true),
+							_Utils_Tuple2('btn-disabled', shouldDisabled)
+						]))
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text(str)
+					$elm$html$Html$text(letter)
 				]));
 	};
 	return A2($elm$core$List$map, buttonView, $author$project$Main$genAllLowerCaseStr);
-}();
+};
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -5432,14 +5508,16 @@ var $author$project$Main$view = function (model) {
 							[
 								$elm$html$Html$Attributes$class('btns-container margin-btm-s')
 							]),
-						$author$project$Main$cipherButtonsView),
+						$author$project$Main$cipherButtonsView(
+							$author$project$Main$getCiphers(model.pairs))),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
 							[
 								$elm$html$Html$Attributes$class('btns-container margin-btm-m')
 							]),
-						$author$project$Main$plainButtonsView),
+						$author$project$Main$plainButtonsView(
+							$author$project$Main$getPlains(model.pairs))),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(

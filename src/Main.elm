@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, h1, h3, p, text)
-import Html.Attributes exposing (class, disabled)
+import Html.Attributes exposing (class, classList, disabled)
 import Html.Events exposing (onClick)
 import Text
 
@@ -98,8 +98,8 @@ view model =
             [ h1 [ class "title margin-btm-m" ] [ text "Simple Monoalphabetic Substitution Cipher" ]
             , p [ class "text" ] [ text Text.explanation ]
             , div [ class "separator" ] []
-            , div [ class "btns-container margin-btm-s" ] cipherButtonsView
-            , div [ class "btns-container margin-btm-m" ] plainButtonsView
+            , div [ class "btns-container margin-btm-s" ] (cipherButtonsView (getCiphers model.pairs))
+            , div [ class "btns-container margin-btm-m" ] (plainButtonsView (getPlains model.pairs))
             , div [ class "row margin-btm-l" ]
                 [ cipherToPlainView model
                 , confirmGenPairButtonView model
@@ -119,30 +119,48 @@ view model =
 -- button view
 
 
-cipherButtonsView : List (Html Msg)
-cipherButtonsView =
+cipherButtonsView : List CipherLetter -> List (Html Msg)
+cipherButtonsView selectedCiphers =
     let
         buttonView : String -> Html Msg
-        buttonView str =
+        buttonView letter =
+            let
+                shouldDisabled : Bool
+                shouldDisabled =
+                    List.member letter selectedCiphers
+            in
             button
-                [ onClick (SelectCipherLetter str)
-                , class "btn btn-alpha"
+                [ onClick (SelectCipherLetter letter)
+                , disabled (List.member letter selectedCiphers)
+                , classList
+                    [ ( "btn btn-alpha", True )
+                    , ( "btn-disabled", shouldDisabled )
+                    ]
                 ]
-                [ text str ]
+                [ text letter ]
     in
     List.map buttonView genAllUpperCaseStr
 
 
-plainButtonsView : List (Html Msg)
-plainButtonsView =
+plainButtonsView : List PlainLetter -> List (Html Msg)
+plainButtonsView selectedPlains =
     let
         buttonView : String -> Html Msg
-        buttonView str =
+        buttonView letter =
+            let
+                shouldDisabled : Bool
+                shouldDisabled =
+                    List.member letter selectedPlains
+            in
             button
-                [ onClick (SelectPlainLetter str)
-                , class "btn btn-alpha"
+                [ onClick (SelectPlainLetter letter)
+                , disabled (List.member letter selectedPlains)
+                , classList
+                    [ ( "btn btn-alpha", True )
+                    , ( "btn-disabled", shouldDisabled )
+                    ]
                 ]
-                [ text str ]
+                [ text letter ]
     in
     List.map buttonView genAllLowerCaseStr
 
@@ -216,3 +234,28 @@ genAllLowerCaseStr : List String
 genAllLowerCaseStr =
     generateChars (List.range 97 122)
         |> List.map String.fromChar
+
+
+type PairElPosition
+    = FirstPos
+    | SecondPos
+
+
+getPairElements : PairElPosition -> List ( a, a ) -> List a
+getPairElements pos pairs =
+    case pos of
+        FirstPos ->
+            List.map Tuple.first pairs
+
+        SecondPos ->
+            List.map Tuple.second pairs
+
+
+getCiphers : List ( CipherLetter, PlainLetter ) -> List CipherLetter
+getCiphers pairs =
+    getPairElements FirstPos pairs
+
+
+getPlains : List ( CipherLetter, PlainLetter ) -> List PlainLetter
+getPlains pairs =
+    getPairElements SecondPos pairs

@@ -68,6 +68,10 @@
   height: 28px;
 }
 
+.btn-disabled {
+  border-color: #b1ab9f7e;
+}
+
 .btn-sm-red {
   padding: 0;
   width: 20px;
