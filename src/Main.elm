@@ -88,7 +88,9 @@ update msg model =
             }
 
         RemoveAllCipherLetterPairs ->
-            { model | pairs = []}
+            { model | pairs = [] }
+
+
 
 -- ----- VIEW -----
 
@@ -110,7 +112,7 @@ view model =
                 [ h3 [ class "sub-title margin-btm-s" ] [ text "Cipher-Plain Pairs:" ]
                 , div [ class "row" ] (List.map cipherPlainPairView model.pairs)
                 ]
-            , resetPairsButtonView (List.isEmpty model.pairs)  
+            , resetPairsButtonView (List.isEmpty model.pairs)
             , div [ class "text" ] [ text model.text ]
             ]
         ]
@@ -176,8 +178,8 @@ confirmGenPairButtonView model =
         [ onClick GenerateCipherLetterPair
         , disabled shouldDisable
         , classList
-            [ ("btn", True)
-            , ("btn-disabled", shouldDisable)    
+            [ ( "btn", True )
+            , ( "btn-disabled", shouldDisable )
             ]
         ]
         [ text "Confirm" ]
@@ -185,13 +187,13 @@ confirmGenPairButtonView model =
 
 resetPairsButtonView : Bool -> Html Msg
 resetPairsButtonView noPairs =
-    button 
+    button
         [ onClick RemoveAllCipherLetterPairs
         , disabled noPairs
         , classList
             [ ( "btn btn-reset margin-btm-l", True )
-            , ( "btn-reset-disabled", noPairs)
-            ]  
+            , ( "btn-reset-disabled", noPairs )
+            ]
         ]
         [ text "Reset" ]
 
