@@ -82,6 +82,17 @@
   color: white;
 }
 
+.btn-reset-disabled {
+  border-color: #f354547a;
+  color: #f354547a;
+}
+
+.btn-reset-disabled:hover {
+  background-color: transparent;
+  border-color: #f354547a;
+  color: #f354547a;
+}
+
 .btn-sm-red {
   padding: 0;
   width: 20px;

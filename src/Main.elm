@@ -58,6 +58,7 @@ type Msg
     | SelectPlainLetter String
     | GenerateCipherLetterPair
     | RemoveCipherLetterPair ( CipherLetter, PlainLetter )
+    | RemoveAllCipherLetterPairs
 
 
 update : Msg -> Model -> Model
@@ -86,7 +87,8 @@ update msg model =
                 | pairs = List.filter shouldBeKept model.pairs
             }
 
-
+        RemoveAllCipherLetterPairs ->
+            { model | pairs = []}
 
 -- ----- VIEW -----
 
@@ -108,7 +110,7 @@ view model =
                 [ h3 [ class "sub-title margin-btm-s" ] [ text "Cipher-Plain Pairs:" ]
                 , div [ class "row" ] (List.map cipherPlainPairView model.pairs)
                 ]
-            , button [ class "btn btn-reset margin-btm-l" ] [ text "Reset" ]
+            , resetPairsButtonView (List.isEmpty model.pairs)  
             , div [ class "text" ] [ text model.text ]
             ]
         ]
@@ -176,6 +178,19 @@ confirmGenPairButtonView model =
         , onClick GenerateCipherLetterPair
         ]
         [ text "Confirm" ]
+
+
+resetPairsButtonView : Bool -> Html Msg
+resetPairsButtonView noPairs =
+    button 
+        [ onClick RemoveAllCipherLetterPairs
+        , disabled noPairs
+        , classList
+            [ ( "btn btn-reset margin-btm-l", True )
+            , ( "btn-reset-disabled", noPairs)
+            ]  
+        ]
+        [ text "Reset" ]
 
 
 

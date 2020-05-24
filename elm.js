@@ -5202,7 +5202,7 @@ var $author$project$Main$update = F2(
 							model.pairs),
 						plain: ''
 					});
-			default:
+			case 'RemoveCipherLetterPair':
 				var _v1 = msg.a;
 				var cipher = _v1.a;
 				var plain = _v1.b;
@@ -5216,12 +5216,16 @@ var $author$project$Main$update = F2(
 					{
 						pairs: A2($elm$core$List$filter, shouldBeKept, model.pairs)
 					});
+			default:
+				return _Utils_update(
+					model,
+					{pairs: _List_Nil});
 		}
 	});
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $author$project$Main$SelectCipherLetter = function (a) {
 	return {$: 'SelectCipherLetter', a: a};
 };
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5425,6 +5429,13 @@ var $author$project$Main$getPlains = function (pairs) {
 };
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
+var $elm$core$List$isEmpty = function (xs) {
+	if (!xs.b) {
+		return true;
+	} else {
+		return false;
+	}
+};
 var $author$project$Main$SelectPlainLetter = function (a) {
 	return {$: 'SelectPlainLetter', a: a};
 };
@@ -5457,6 +5468,26 @@ var $author$project$Main$plainButtonsView = function (selectedPlains) {
 				]));
 	};
 	return A2($elm$core$List$map, buttonView, $author$project$Main$genAllLowerCaseStr);
+};
+var $author$project$Main$RemoveAllCipherLetterPairs = {$: 'RemoveAllCipherLetterPairs'};
+var $author$project$Main$resetPairsButtonView = function (noPairs) {
+	return A2(
+		$elm$html$Html$button,
+		_List_fromArray(
+			[
+				$elm$html$Html$Events$onClick($author$project$Main$RemoveAllCipherLetterPairs),
+				$elm$html$Html$Attributes$disabled(noPairs),
+				$elm$html$Html$Attributes$classList(
+				_List_fromArray(
+					[
+						_Utils_Tuple2('btn btn-reset margin-btm-l', true),
+						_Utils_Tuple2('btn-reset-disabled', noPairs)
+					]))
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Reset')
+			]));
 };
 var $author$project$Main$view = function (model) {
 	return A2(
@@ -5552,16 +5583,8 @@ var $author$project$Main$view = function (model) {
 									]),
 								A2($elm$core$List$map, $author$project$Main$cipherPlainPairView, model.pairs))
 							])),
-						A2(
-						$elm$html$Html$button,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('btn btn-reset margin-btm-l')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Reset')
-							])),
+						$author$project$Main$resetPairsButtonView(
+						$elm$core$List$isEmpty(model.pairs)),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
