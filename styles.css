@@ -48,7 +48,7 @@
 }
 
 .btn {
-  padding: 8px;
+  padding: 4px 8px;
   border: 2px solid #b1ab9f;
   background-color: transparent;
   transition-property: background-color, color;
@@ -70,6 +70,16 @@
 
 .btn-disabled {
   border-color: #b1ab9f7e;
+}
+
+.btn-reset {
+  border-color: #f35454;
+  color: #f35454;
+}
+
+.btn-reset:hover {
+  background-color: #f35454;
+  color: white;
 }
 
 .btn-sm-red {

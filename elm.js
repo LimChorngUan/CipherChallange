@@ -5218,10 +5218,10 @@ var $author$project$Main$update = F2(
 					});
 		}
 	});
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $author$project$Main$SelectCipherLetter = function (a) {
 	return {$: 'SelectCipherLetter', a: a};
 };
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -5353,7 +5353,7 @@ var $author$project$Main$cipherPlainPairView = function (_v0) {
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				$elm$html$Html$Attributes$class('cipherPlainPairContainer margin-btm-l')
+				$elm$html$Html$Attributes$class('cipherPlainPairContainer margin-btm-m')
 			]),
 		_List_fromArray(
 			[
@@ -5538,7 +5538,7 @@ var $author$project$Main$view = function (model) {
 								$elm$html$Html$h3,
 								_List_fromArray(
 									[
-										$elm$html$Html$Attributes$class('sub-title margin-btm-m')
+										$elm$html$Html$Attributes$class('sub-title margin-btm-s')
 									]),
 								_List_fromArray(
 									[
@@ -5551,6 +5551,16 @@ var $author$project$Main$view = function (model) {
 										$elm$html$Html$Attributes$class('row')
 									]),
 								A2($elm$core$List$map, $author$project$Main$cipherPlainPairView, model.pairs))
+							])),
+						A2(
+						$elm$html$Html$button,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('btn btn-reset margin-btm-l')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Reset')
 							])),
 						A2(
 						$elm$html$Html$div,

@@ -105,11 +105,10 @@ view model =
                 , confirmGenPairButtonView model
                 ]
             , div []
-                [ h3 [ class "sub-title margin-btm-m" ] [ text "Cipher-Plain Pairs:" ]
+                [ h3 [ class "sub-title margin-btm-s" ] [ text "Cipher-Plain Pairs:" ]
                 , div [ class "row" ] (List.map cipherPlainPairView model.pairs)
                 ]
-
-            -- , button [ class "btn" ] [ text "Reset" ]
+            , button [ class "btn btn-reset margin-btm-l" ] [ text "Reset" ]
             , div [ class "text" ] [ text model.text ]
             ]
         ]
@@ -205,7 +204,7 @@ cipherToPlainView model =
 
 cipherPlainPairView : ( CipherLetter, PlainLetter ) -> Html Msg
 cipherPlainPairView ( cipher, plain ) =
-    div [ class "cipherPlainPairContainer margin-btm-l" ]
+    div [ class "cipherPlainPairContainer margin-btm-m" ]
         [ p [] [ text (cipher ++ " >> " ++ plain) ]
         , button
             [ class "btn btn-sm-red"
