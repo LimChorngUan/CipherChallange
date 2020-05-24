@@ -5401,9 +5401,14 @@ var $author$project$Main$confirmGenPairButtonView = function (model) {
 		$elm$html$Html$button,
 		_List_fromArray(
 			[
+				$elm$html$Html$Events$onClick($author$project$Main$GenerateCipherLetterPair),
 				$elm$html$Html$Attributes$disabled(shouldDisable),
-				$elm$html$Html$Attributes$class('btn'),
-				$elm$html$Html$Events$onClick($author$project$Main$GenerateCipherLetterPair)
+				$elm$html$Html$Attributes$classList(
+				_List_fromArray(
+					[
+						_Utils_Tuple2('btn', true),
+						_Utils_Tuple2('btn-disabled', shouldDisable)
+					]))
 			]),
 		_List_fromArray(
 			[

@@ -173,9 +173,12 @@ confirmGenPairButtonView model =
             String.isEmpty model.cipher || String.isEmpty model.plain
     in
     button
-        [ disabled shouldDisable
-        , class "btn"
-        , onClick GenerateCipherLetterPair
+        [ onClick GenerateCipherLetterPair
+        , disabled shouldDisable
+        , classList
+            [ ("btn", True)
+            , ("btn-disabled", shouldDisable)    
+            ]
         ]
         [ text "Confirm" ]
 

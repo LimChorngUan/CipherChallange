@@ -69,7 +69,13 @@
 }
 
 .btn-disabled {
+  color: #b1ab9f7e;
   border-color: #b1ab9f7e;
+}
+
+.btn-disabled:hover {
+  color:#b1ab9f7e;
+  background-color: transparent;
 }
 
 .btn-reset {
@@ -109,6 +115,7 @@
 .row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .row > * {
