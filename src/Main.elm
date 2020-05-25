@@ -45,7 +45,7 @@ initialModel =
     { cipher = ""
     , plain = ""
     , pairs = []
-    , text = "abcd jakjsdf;l ajkwiou mzm,xiuw  ajksldj;f qewiuk ajkdjfiwm vjkladjsf jqiweru"
+    , text = "QWERTYUIPASDFZXCVGHJKBNML"
     }
 
 
@@ -103,7 +103,7 @@ view model =
             , p [ class "text" ] [ text Text.explanation ]
             , div [ class "separator" ] []
             , div [ class "btns-container margin-btm-s" ] (cipherButtonsView (getCiphers model.pairs))
-            , div [ class "btns-container margin-btm-m" ] (plainButtonsView (getPlains model.pairs))
+            , div [ class "btns-container margin-btm-m" ] (plainButtonsView (getPlains model.pairs) model.cipher)
             , div [ class "row margin-btm-l" ]
                 [ cipherToPlainView model
                 , confirmGenPairButtonView model
@@ -145,19 +145,19 @@ cipherButtonsView selectedCiphers =
     List.map buttonView genAllUpperCaseStr
 
 
-plainButtonsView : List PlainLetter -> List (Html Msg)
-plainButtonsView selectedPlains =
+plainButtonsView : List PlainLetter -> CipherLetter -> List (Html Msg)
+plainButtonsView selectedPlains selectedCipher =
     let
         buttonView : String -> Html Msg
         buttonView letter =
             let
                 shouldDisabled : Bool
                 shouldDisabled =
-                    List.member letter selectedPlains
+                     String.isEmpty selectedCipher || List.member letter selectedPlains
             in
             button
                 [ onClick (SelectPlainLetter letter)
-                , disabled (List.member letter selectedPlains)
+                , disabled shouldDisabled
                 , classList
                     [ ( "btn btn-alpha", True )
                     , ( "btn-disabled", shouldDisabled )
@@ -232,7 +232,6 @@ cipherPlainPairView ( cipher, plain ) =
             ]
             [ text "X" ]
         ]
-
 
 
 -- ----- HELPER -----

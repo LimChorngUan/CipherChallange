@@ -4435,7 +4435,7 @@ var $elm$core$Set$toList = function (_v0) {
 var $elm$core$Basics$EQ = {$: 'EQ'};
 var $elm$core$Basics$GT = {$: 'GT'};
 var $elm$core$Basics$LT = {$: 'LT'};
-var $author$project$Main$initialModel = {cipher: '', pairs: _List_Nil, plain: '', text: 'abcd jakjsdf;l ajkwiou mzm,xiuw  ajksldj;f qewiuk ajkdjfiwm vjkladjsf jqiweru'};
+var $author$project$Main$initialModel = {cipher: '', pairs: _List_Nil, plain: '', text: 'QWERTYUIPASDFZXCVGHJKBNML'};
 var $elm$core$Result$Err = function (a) {
 	return {$: 'Err', a: a};
 };
@@ -5449,31 +5449,31 @@ var $author$project$Main$genAllLowerCaseStr = A2(
 	$elm$core$String$fromChar,
 	$author$project$Main$generateChars(
 		A2($elm$core$List$range, 97, 122)));
-var $author$project$Main$plainButtonsView = function (selectedPlains) {
-	var buttonView = function (letter) {
-		var shouldDisabled = A2($elm$core$List$member, letter, selectedPlains);
-		return A2(
-			$elm$html$Html$button,
-			_List_fromArray(
-				[
-					$elm$html$Html$Events$onClick(
-					$author$project$Main$SelectPlainLetter(letter)),
-					$elm$html$Html$Attributes$disabled(
-					A2($elm$core$List$member, letter, selectedPlains)),
-					$elm$html$Html$Attributes$classList(
-					_List_fromArray(
-						[
-							_Utils_Tuple2('btn btn-alpha', true),
-							_Utils_Tuple2('btn-disabled', shouldDisabled)
-						]))
-				]),
-			_List_fromArray(
-				[
-					$elm$html$Html$text(letter)
-				]));
-	};
-	return A2($elm$core$List$map, buttonView, $author$project$Main$genAllLowerCaseStr);
-};
+var $author$project$Main$plainButtonsView = F2(
+	function (selectedPlains, selectedCipher) {
+		var buttonView = function (letter) {
+			var shouldDisabled = $elm$core$String$isEmpty(selectedCipher) || A2($elm$core$List$member, letter, selectedPlains);
+			return A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick(
+						$author$project$Main$SelectPlainLetter(letter)),
+						$elm$html$Html$Attributes$disabled(shouldDisabled),
+						$elm$html$Html$Attributes$classList(
+						_List_fromArray(
+							[
+								_Utils_Tuple2('btn btn-alpha', true),
+								_Utils_Tuple2('btn-disabled', shouldDisabled)
+							]))
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(letter)
+					]));
+		};
+		return A2($elm$core$List$map, buttonView, $author$project$Main$genAllLowerCaseStr);
+	});
 var $author$project$Main$RemoveAllCipherLetterPairs = {$: 'RemoveAllCipherLetterPairs'};
 var $author$project$Main$resetPairsButtonView = function (noPairs) {
 	return A2(
@@ -5552,8 +5552,10 @@ var $author$project$Main$view = function (model) {
 							[
 								$elm$html$Html$Attributes$class('btns-container margin-btm-m')
 							]),
-						$author$project$Main$plainButtonsView(
-							$author$project$Main$getPlains(model.pairs))),
+						A2(
+							$author$project$Main$plainButtonsView,
+							$author$project$Main$getPlains(model.pairs),
+							model.cipher)),
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
