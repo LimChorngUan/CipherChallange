@@ -46,7 +46,7 @@ initialModel =
     { cipher = ""
     , plain = ""
     , pairs = []
-    , text = "QWERTYUIPASDFZXCVGHJKBNML"
+    , text = Text.cipherChallangeText
     }
 
 
