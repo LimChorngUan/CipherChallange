@@ -1,4 +1,4 @@
-module Text exposing (explanation, cipherChallangeText)
+module Text exposing (cipherChallangeText, explanation)
 
 
 explanation : String

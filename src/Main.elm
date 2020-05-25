@@ -1,7 +1,7 @@
 module Main exposing (main)
 
-import Dict exposing (Dict)
 import Browser
+import Dict exposing (Dict)
 import Html exposing (Html, button, div, h1, h3, p, span, text)
 import Html.Attributes exposing (class, classList, disabled)
 import Html.Events exposing (onClick)
@@ -154,7 +154,7 @@ plainButtonsView selectedPlains selectedCipher =
             let
                 shouldDisabled : Bool
                 shouldDisabled =
-                     String.isEmpty selectedCipher || List.member letter selectedPlains
+                    String.isEmpty selectedCipher || List.member letter selectedPlains
             in
             button
                 [ onClick (SelectPlainLetter letter)
@@ -235,31 +235,38 @@ cipherPlainPairView ( cipher, plain ) =
         ]
 
 
+
 -- text view
+
+
 textView : Model -> Html Msg
 textView model =
     let
         textArr : List String
-        textArr = String.split "" model.text
+        textArr =
+            String.split "" model.text
 
         pairs : Dict CipherLetter PlainLetter
-        pairs = Dict.fromList model.pairs
+        pairs =
+            Dict.fromList model.pairs
 
         letterView : String -> Html Msg
         letterView letter =
             let
                 transformedLetter : String
-                transformedLetter = Maybe.withDefault letter (Dict.get letter pairs)
+                transformedLetter =
+                    Maybe.withDefault letter (Dict.get letter pairs)
 
                 shouldHighlight : Bool
-                shouldHighlight = transformedLetter == model.cipher
+                shouldHighlight =
+                    transformedLetter == model.cipher
             in
             span
-                [ classList [ ("highlight", shouldHighlight) ]]
+                [ classList [ ( "highlight", shouldHighlight ) ] ]
                 [ text transformedLetter ]
-
     in
-    p [ class "text letter-spacing-l"] (List.map letterView textArr)
+    p [ class "text letter-spacing-l" ] (List.map letterView textArr)
+
 
 
 -- ----- HELPER -----
