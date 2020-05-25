@@ -1,7 +1,8 @@
 module Main exposing (main)
 
+import Dict exposing (Dict)
 import Browser
-import Html exposing (Html, button, div, h1, h3, p, text)
+import Html exposing (Html, button, div, h1, h3, p, span, text)
 import Html.Attributes exposing (class, classList, disabled)
 import Html.Events exposing (onClick)
 import Text
@@ -113,7 +114,7 @@ view model =
                 , div [ class "row" ] (List.map cipherPlainPairView model.pairs)
                 ]
             , resetPairsButtonView (List.isEmpty model.pairs)
-            , div [ class "text" ] [ text model.text ]
+            , div [ class "text" ] [ textView model ]
             ]
         ]
 
@@ -232,6 +233,33 @@ cipherPlainPairView ( cipher, plain ) =
             ]
             [ text "X" ]
         ]
+
+
+-- text view
+textView : Model -> Html Msg
+textView model =
+    let
+        textArr : List String
+        textArr = String.split "" model.text
+
+        pairs : Dict CipherLetter PlainLetter
+        pairs = Dict.fromList model.pairs
+
+        letterView : String -> Html Msg
+        letterView letter =
+            let
+                transformedLetter : String
+                transformedLetter = Maybe.withDefault letter (Dict.get letter pairs)
+
+                shouldHighlight : Bool
+                shouldHighlight = transformedLetter == model.cipher
+            in
+            span
+                [ classList [ ("highlight", shouldHighlight) ]]
+                [ text transformedLetter ]
+
+    in
+    p [ class "text letter-spacing-l"] (List.map letterView textArr)
 
 
 -- ----- HELPER -----

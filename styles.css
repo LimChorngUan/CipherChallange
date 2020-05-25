@@ -142,3 +142,11 @@
 .margin-btm-l {
   margin-bottom: 2rem;
 }
+
+.letter-spacing-l {
+  letter-spacing: 0.2rem;
+}
+
+.highlight {
+  background-color: #b1ab9f70;
+}
